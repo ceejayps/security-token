@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CryptoJS Example</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.1.1/crypto-js.min.js"></script>
+</head>
+
+<body>
+    <script>
+        const tokenId = 1876;
+
+        // Get the current date and time
+        let now = new Date();
+
+        // Format the date and time
+        let options = {
+            timeZone: "America/New_York", // You can change this to the desired US timezone
+            year: "numeric",
+            month: "long",
+            day: "numeric",
+            hour: "2-digit",
+            minute: "2-digit",
+            second: "2-digit",
+            hour12: true, // Use 12-hour clock format
+        };
+
+        // Function to generate code
+        const genr8Code = (id) => {
+            let formattedTime = now.toLocaleString("en-US", options);
+            console.log(formattedTime);
+
+            // Convert the date string to a timestamp
+            const hashTime = Date.parse(formattedTime);
+
+            // Combine the id and current time into a single string
+            const combinedString = `${id},${hashTime}`;
+
+            // Create a hash using SHA-256 with CryptoJS
+            const hash = CryptoJS.SHA256(combinedString);
+
+            // Convert the hash to a hexadecimal string
+            const hashedString = hash.toString(CryptoJS.enc.Hex);
+
+            // Get the first 4 characters of the hash to create the hex
+            const hexCode = hashedString.substring(0, 6);
+
+            // Convert hex string to decimal
+            const code = parseInt(hexCode, 16);
+
+            // Return the first 6 digits of the code
+            return code.toString().substring(0, 6);
+        };
+
+        console.log(genr8Code(tokenId));
+    </script>
+</body>
+
+</html>
